@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <script>
+        async function deleteOrder(number) {
+            const response = await fetch(`/order/${number}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Error deleting order');
+            }
+        }
+
+        function fillUpdateForm(order) {
+            document.getElementById('updateNumber').value = order.number;
+            document.getElementById('updateDate').value = order.date;
+            document.getElementById('updateTehnica').value = order.tehnica;
+            document.getElementById('updateModel').value = order.model;
+            document.getElementById('updateProblema').value = order.problema;
+            document.getElementById('updateFIO').value = order.FIO;
+            document.getElementById('updatePhone').value = order.phone;
+            document.getElementById('updateStatus').value = order.status;
+
+            // Set the form action for the update
+            document.getElementById('updateForm').action = `/order/${order.number}`;
+            document.getElementById('updateForm').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>Заявки</h1>
+    <table>
+        <tr>
+            <th>Номер</th>
+            <th>Дата</th>
+            <th>Техника</th>
+            <th>Модель</th>
+            <th>Проблема</th>
+            <th>ФИО</th>
+            <th>Номер телефона</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.number }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.tehnica }}</td>
+            <td>{{ order.model }}</td>
+            <td>{{ order.problema }}</td>
+            <td>{{ order.FIO }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <button onclick='fillUpdateForm({ 
+                    "number": "{{ order.number }}", 
+                    "date": "{{ order.date }}", 
+                    "tehnica": "{{ order.tehnica }}", 
+                    "model": "{{ order.model }}", 
+                    "problema": "{{ order.problema }}", 
+                    "FIO": "{{ order.FIO }}", 
+                    "phone": "{{ order.phone }}", 
+                    "status": "{{ order.status }}" 
+                })'>Изменить</button>
+                <button onclick='deleteOrder("{{ order.number }}")'>Удалить</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Добавить заявку</h2>
+    <form action="/add" method="post">
+        <input type="number" name="number" required placeholder="Номер">
+        <input type="text" name="date" required placeholder="ГГГГ-ММ-ДД">
+        <input type="text" name="tehnica" required placeholder="Техника">
+        <input type="text" name="model" required placeholder="Модель">
+        <input type="text" name="problema" required placeholder="Проблема">
+        <input type="text" name="FIO" required placeholder="ФИО">
+        <input type="number" name="phone" required placeholder="Номер телефона">
+        <select name="status" required>
+            <option value="Готова к выдаче">Готова к выдаче</option>
+            <option value="В процессе ремонта">В процессе ремонта</option>
+            <option value="Ожидание запчастей">Ожидание запчастей</option>
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <h2>Изменить заявку</h2>
+    <form id="updateForm" action="" method="post" style="display:none;">
+        <input type="hidden" id="updateNumber" name="number">
+        <input type="text" id="updateDate" name="date" required placeholder="ГГГГ-ММ-ДД">
+        <input type="text" id="updateTehnica" name="tehnica" required placeholder="Техника">
+        <input type="text" id="updateModel" name="model" required placeholder="Модель">
+        <input type="text" id="updateProblema" name="problema" required placeholder="Проблема">
+        <input type="text" id="updateFIO" name="FIO" required placeholder="ФИО">
+        <input type="text" id="updatePhone" name="phone" required placeholder="Номер телефона">
+        <select id="updateStatus" name="status" required>
+            <option value="Готова к выдаче">Готова к выдаче</option>
+            <option value="В процессе ремонта">В процессе ремонта</option>
+            <option value="Ожидание запчастей">Ожидание запчастей</option>
+        </select>
+        <button type="submit" onclick="this.form.method='PUT'">Изменить</button>
+    </form>
+</body>
+</html>

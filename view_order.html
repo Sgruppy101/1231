@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Изменить Заявку</title>
+</head>
+<body>
+    <h1>Смотреть Заявку</h1>
+    <form action="/order/{{ order.number }}" method="put">
+        Number: {{ order.number }}<br>
+        Date (YYYY-MM-DD): <input type="text" name="дата" value="{{ order.date.strftime('%Y-%m-%d') }}"><br>
+        Tehnica: <input type="text" name="техника" value="{{ order.tehnica }}"><br>
+        Model: <input type="text" name="модель" value="{{ order.model }}"><br>
+        Problema: <input type="text" name="проблема" value="{{ order.problema }}"><br>
+        FIO: <input type="text" name="ФИО" value="{{ order.FIO }}"><br>
+        Phone: <input type="text" name="номер телефона" value="{{ order.phone }}"><br>
+        Status: <input type="text" name="статус" value="{{ order.status }}"><br>
+        <input type="submit" value="Изменить Заявку">
+    </form>
+    <a href="/">Вернуться к добавлению заявок</a>
+</body>
+</html>
